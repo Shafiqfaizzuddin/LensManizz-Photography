@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LensManizz Photography Booking System</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            color: #718096;
+            margin-bottom: 1.5rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .book-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .close:hover {
+            color: #4a5568;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-weight: bold;
+            padding: 0.5rem;
+            color: #4a5568;
+        }
+
+        .calendar-day {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            background: #f7fafc;
+        }
+
+        .calendar-day.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .calendar-day.disabled {
+            color: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-slot:hover {
+            border-color: #667eea;
+        }
+
+        .time-slot.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">📸 LensManizz Photography</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Professional Photography Services</h1>
+            <p>Capture your precious moments with our expert photography and premium camera rental services</p>
+        </section>
+
+        <section class="services">
+            <div class="service-card">
+                <div class="service-icon">📷</div>
+                <h3>Camera Rental</h3>
+                <p>Professional DSLR and mirrorless cameras available for rent. Perfect for events, travel, or personal projects.</p>
+                <div class="price">RM150/day</div>
+                <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;">
+                    <strong>💰 Safety Deposit: RM50</strong><br>
+                    <small>Fully refundable upon safe return without damage</small>
+                </div>
+                <button class="book-btn" onclick="openBookingModal('Camera Rental', 150, 50)">Book Camera</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">👨‍💼</div>
+                <h3>Portrait Session</h3>
+                <p>Professional portrait photography for individuals, couples, or families. Includes editing and digital delivery.</p>
+                <div class="price">RM600/session</div>
+                <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;">
+                    <strong>💰 Deposit: RM100</strong><br>
+                    <small>Refundable security deposit</small>
+                </div>
+                <button class="book-btn" onclick="openBookingModal('Portrait Session', 600, 100)">Book Session</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">💒</div>
+                <h3>Event Photography</h3>
+                <p>Complete event coverage including weddings, parties, and corporate events. Full day coverage with edited photos.</p>
+                <div class="price">RM2400/event</div>
+                <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;">
+                    <strong>💰 Deposit: RM200</strong><br>
+                    <small>Refundable security deposit</small>
+                </div>
+                <button class="book-btn" onclick="openBookingModal('Event Photography', 2400, 200)">Book Event</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBookingModal()">&times;</span>
+            <h2 id="modalTitle">Book Service</h2>
+            
+            <form id="bookingForm" onsubmit="submitBooking(event)">
+                <div class="form-group">
+                    <label for="customerName">Full Name</label>
+                    <input type="text" id="customerName" name="customerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerEmail">Email Address</label>
+                    <input type="email" id="customerEmail" name="customerEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number</label>
+                    <input type="tel" id="customerPhone" name="customerPhone" required>
+                </div>
+
+                <div class="form-group" id="brandGroup" style="display: none;">
+                    <label for="cameraBrand">Camera Brand</label>
+                    <select id="cameraBrand" name="cameraBrand" onchange="showCameraModels()">
+                        <option value="">Select Brand</option>
+                        <option value="Canon">Canon</option>
+                        <option value="Nikon">Nikon</option>
+                        <option value="Sony">Sony</option>
+                        <option value="Fujifilm">Fujifilm</option>
+                        <option value="Panasonic">Panasonic</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="modelGroup" style="display: none;">
+                    <label for="cameraModel">Camera Model</label>
+                    <select id="cameraModel" name="cameraModel">
+                        <option value="">Select Model</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Date</label>
+                    <div class="calendar" id="calendar"></div>
+                </div>
+
+                <div class="form-group" id="timeSlotGroup" style="display: none;">
+                    <label>Select Time</label>
+                    <div class="time-slots" id="timeSlots"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="specialRequests">Special Requests</label>
+                    <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any special requirements or notes..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Service Fee:</span>
+                            <span>RM<span id="serviceFee">0</span></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Deposit (Refundable):</span>
+                            <span>RM<span id="depositAmount">0</span></span>
+                        </div>
+                        <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem;">
+                            <span>Total Amount:</span>
+                            <span>RM<span id="totalPrice">0</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let selectedService = '';
+        let selectedPrice = 0;
+        let selectedDeposit = 0;
+        let selectedDate = '';
+        let selectedTime = '';
+
+        const cameraModels = {
+            Canon: ['EOS R5', 'EOS R6 Mark II', 'EOS 5D Mark IV', 'EOS 90D', 'EOS M50 Mark II'],
+            Nikon: ['Z9', 'Z7II', 'D850', 'D780', 'Z50'],
+            Sony: ['A7R V', 'A7 IV', 'A6700', 'FX30', 'A7C'],
+            Fujifilm: ['X-T5', 'X-H2S', 'X-S20', 'GFX100S', 'X-T30 II'],
+            Panasonic: ['GH6', 'S5 II', 'G9', 'FZ2500', 'GX9']
+        };
+
+        function openBookingModal(service, price, deposit) {
+            selectedService = service;
+            selectedPrice = price;
+            selectedDeposit = deposit;
+            document.getElementById('modalTitle').textContent = `Book ${service}`;
+            document.getElementById('serviceFee').textContent = price;
+            document.getElementById('depositAmount').textContent = deposit;
+            document.getElementById('totalPrice').textContent = (price + deposit);
+            
+            // Show camera brand selection only for camera rental
+            const brandGroup = document.getElementById('brandGroup');
+            const modelGroup = document.getElementById('modelGroup');
+            
+            if (service === 'Camera Rental') {
+                brandGroup.style.display = 'block';
+            } else {
+                brandGroup.style.display = 'none';
+                modelGroup.style.display = 'none';
+            }
+            
+            document.getElementById('bookingModal').style.display = 'block';
+            generateCalendar();
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+            resetForm();
+        }
+
+        function resetForm() {
+            document.getElementById('bookingForm').reset();
+            selectedDate = '';
+            selectedTime = '';
+            document.getElementById('timeSlotGroup').style.display = 'none';
+            document.getElementById('modelGroup').style.display = 'none';
+        }
+
+        function showCameraModels() {
+            const brandSelect = document.getElementById('cameraBrand');
+            const modelSelect = document.getElementById('cameraModel');
+            const modelGroup = document.getElementById('modelGroup');
+            
+            const selectedBrand = brandSelect.value;
+            
+            if (selectedBrand && cameraModels[selectedBrand]) {
+                // Clear previous options
+                modelSelect.innerHTML = '<option value="">Select Model</option>';
+                
+                // Add models for selected brand
+                cameraModels[selectedBrand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+                
+                modelGroup.style.display = 'block';
+            } else {
+                modelGroup.style.display = 'none';
+            }
+        }
+
+        function generateCalendar() {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            // Calendar headers
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-header';
+                header.textContent = day;
+                calendar.appendChild(header);
+            });
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day disabled';
+                calendar.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                const dayDate = new Date(currentYear, currentMonth, day);
+                if (dayDate < today) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    dayElement.onclick = () => selectDate(day, currentMonth, currentYear);
+                }
+                
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(day, month, year) {
+            // Remove previous selection
+            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Add selection to clicked day
+            event.target.classList.add('selected');
+            
+            selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            generateTimeSlots();
+        }
+
+        function generateTimeSlots() {
+            const timeSlots = document.getElementById('timeSlots');
+            const timeSlotGroup = document.getElementById('timeSlotGroup');
+            
+            timeSlots.innerHTML = '';
+            timeSlotGroup.style.display = 'block';
+            
+            const slots = ['9:00 AM', '11:00 AM', '1:00 PM', '3:00 PM', '5:00 PM', '7:00 PM'];
+            
+            slots.forEach(time => {
+                const slot = document.createElement('div');
+                slot.className = 'time-slot';
+                slot.textContent = time;
+                slot.onclick = () => selectTime(time, slot);
+                timeSlots.appendChild(slot);
+            });
+        }
+
+        function selectTime(time, element) {
+            // Remove previous selection
+            document.querySelectorAll('.time-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Add selection to clicked time
+            element.classList.add('selected');
+            selectedTime = time;
+        }
+
+        function submitBooking(event) {
+            event.preventDefault();
+            
+            if (!selectedDate || !selectedTime) {
+                alert('Please select both date and time for your booking.');
+                return;
+            }
+            
+            const formData = new FormData(event.target);
+            const bookingData = {
+                service: selectedService,
+                price: selectedPrice,
+                deposit: selectedDeposit,
+                date: selectedDate,
+                time: selectedTime,
+                name: formData.get('customerName'),
+                email: formData.get('customerEmail'),
+                phone: formData.get('customerPhone'),
+                requests: formData.get('specialRequests')
+            };
+            
+            // Create confirmation message
+            const confirmationDiv = document.createElement('div');
+            confirmationDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                z-index: 1001;
+                text-align: center;
+                max-width: 400px;
+            `;
+            
+            confirmationDiv.innerHTML = `
+                <h3 style="color: #48bb78; margin-bottom: 1rem;">✅ Booking Confirmed!</h3>
+                <p><strong>Service:</strong> ${bookingData.service}</p>
+                <p><strong>Date:</strong> ${bookingData.date}</p>
+                <p><strong>Time:</strong> ${bookingData.time}</p>
+                <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Service Fee:</span>
+                        <span>RM${bookingData.price}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Deposit:</span>
+                        <span>RM${bookingData.deposit}</span>
+                    </div>
+                    <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                        <span>Total:</span>
+                        <span>RM${bookingData.price + bookingData.deposit}</span>
+                    </div>
+                </div>
+                <p style="margin-top: 1rem; color: #718096; font-size: 0.9rem;">We'll send a confirmation email to ${bookingData.email}</p>
+                <button onclick="this.parentElement.remove(); closeBookingModal();" 
+                        style="background: #48bb78; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; margin-top: 1rem; cursor: pointer;">
+                    Close
+                </button>
+            `;
+            
+            document.body.appendChild(confirmationDiv);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target === modal) {
+                closeBookingModal();
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'995206d3f3c6a846',t:'MTc2MTU2NjM2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
