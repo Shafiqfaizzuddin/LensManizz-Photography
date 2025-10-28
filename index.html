@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LensManizz Photography Booking System</title>
-    <style>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeManis Photography Booking System</title>
+  <style>
         body {
             box-sizing: border-box;
             margin: 0;
@@ -51,11 +51,20 @@
             text-decoration: none;
             color: #4a5568;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
         }
 
         .nav-links a:hover {
             color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-links a.active {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.15);
+            font-weight: 600;
         }
 
         .container {
@@ -87,6 +96,15 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .section {
+            min-height: 100%;
+            padding: 2rem 0;
         }
 
         .service-card {
@@ -239,6 +257,29 @@
             color: white;
         }
 
+        .calendar-day.selected-range {
+            background: rgba(102, 126, 234, 0.3);
+            color: #4a5568;
+        }
+
+        .calendar-day.selected-start {
+            background: #667eea;
+            color: white;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .calendar-day.selected-end {
+            background: #667eea;
+            color: white;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .calendar-day.selected-single {
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+        }
+
         .calendar-day.disabled {
             color: #cbd5e0;
             cursor: not-allowed;
@@ -306,150 +347,180 @@
             }
         }
     </style>
-</head>
-<body>
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">📸 LensManizz Photography</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="container">
-        <section class="hero">
-            <h1>Professional Photography Services</h1>
-            <p>Capture your precious moments with our expert photography and premium camera rental services</p>
-        </section>
-
-        <section class="services">
-            <div class="service-card">
-                <div class="service-icon">📷</div>
-                <h3>Camera Rental</h3>
-                <p>Professional DSLR and mirrorless cameras available for rent. Perfect for events, travel, or personal projects.</p>
-                <div class="price">RM150/day</div>
-                <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;">
-                    <strong>💰 Safety Deposit: RM50</strong><br>
-                    <small>Fully refundable upon safe return without damage</small>
-                </div>
-                <button class="book-btn" onclick="openBookingModal('Camera Rental', 150, 50)">Book Camera</button>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon">👨‍💼</div>
-                <h3>Portrait Session</h3>
-                <p>Professional portrait photography for individuals, couples, or families. Includes editing and digital delivery.</p>
-                <div class="price">RM600/session</div>
-                <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;">
-                    <strong>💰 Deposit: RM100</strong><br>
-                    <small>Refundable security deposit</small>
-                </div>
-                <button class="book-btn" onclick="openBookingModal('Portrait Session', 600, 100)">Book Session</button>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon">💒</div>
-                <h3>Event Photography</h3>
-                <p>Complete event coverage including weddings, parties, and corporate events. Full day coverage with edited photos.</p>
-                <div class="price">RM2400/event</div>
-                <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;">
-                    <strong>💰 Deposit: RM200</strong><br>
-                    <small>Refundable security deposit</small>
-                </div>
-                <button class="book-btn" onclick="openBookingModal('Event Photography', 2400, 200)">Book Event</button>
-            </div>
-        </section>
-    </main>
-
-    <!-- Booking Modal -->
-    <div id="bookingModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeBookingModal()">&times;</span>
-            <h2 id="modalTitle">Book Service</h2>
-            
-            <form id="bookingForm" onsubmit="submitBooking(event)">
-                <div class="form-group">
-                    <label for="customerName">Full Name</label>
-                    <input type="text" id="customerName" name="customerName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="customerEmail">Email Address</label>
-                    <input type="email" id="customerEmail" name="customerEmail" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="customerPhone">Phone Number</label>
-                    <input type="tel" id="customerPhone" name="customerPhone" required>
-                </div>
-
-                <div class="form-group" id="brandGroup" style="display: none;">
-                    <label for="cameraBrand">Camera Brand</label>
-                    <select id="cameraBrand" name="cameraBrand" onchange="showCameraModels()">
-                        <option value="">Select Brand</option>
-                        <option value="Canon">Canon</option>
-                        <option value="Nikon">Nikon</option>
-                        <option value="Sony">Sony</option>
-                        <option value="Fujifilm">Fujifilm</option>
-                        <option value="Panasonic">Panasonic</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="modelGroup" style="display: none;">
-                    <label for="cameraModel">Camera Model</label>
-                    <select id="cameraModel" name="cameraModel">
-                        <option value="">Select Model</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Select Date</label>
-                    <div class="calendar" id="calendar"></div>
-                </div>
-
-                <div class="form-group" id="timeSlotGroup" style="display: none;">
-                    <label>Select Time</label>
-                    <div class="time-slots" id="timeSlots"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="specialRequests">Special Requests</label>
-                    <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any special requirements or notes..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                            <span>Service Fee:</span>
-                            <span>RM<span id="serviceFee">0</span></span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                            <span>Deposit (Refundable):</span>
-                            <span>RM<span id="depositAmount">0</span></span>
-                        </div>
-                        <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
-                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem;">
-                            <span>Total Amount:</span>
-                            <span>RM<span id="totalPrice">0</span></span>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="submit-btn">Confirm Booking</button>
-            </form>
-        </div>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <header class="header">
+   <nav class="nav">
+    <div class="logo">
+     📸 DeManis Photography
     </div>
-
-    <script>
+    <ul class="nav-links">
+     <li><a href="#" id="homeNav" class="active" onclick="showSection('home')">Home</a></li>
+     <li><a href="#" id="servicesNav" onclick="showSection('services')">Services</a></li>
+     <li><a href="#" id="portfolioNav" onclick="showSection('portfolio')">Portfolio</a></li>
+     <li><a href="#" id="contactNav" onclick="showSection('contact')">Contact</a></li>
+    </ul>
+   </nav>
+  </header>
+  <main class="container"><!-- Home Section -->
+   <section id="homeSection" class="section">
+    <div class="hero">
+     <h1>Welcome to DeManis Photography</h1>
+     <p>Your premier destination for professional photography services in Malaysia</p>
+    </div>
+    <div style="background: white; border-radius: 15px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+     <h2 style="color: #4a5568; margin-bottom: 1.5rem; text-align: center;">About DeManis Photography</h2>
+     <p style="color: #718096; line-height: 1.6; margin-bottom: 1rem;">Established in 2015, DeManis Photography has been capturing Malaysia's most precious moments with artistic excellence and professional dedication. Our team of experienced photographers specializes in creating timeless memories that last a lifetime.</p>
+     <p style="color: #718096; line-height: 1.6; margin-bottom: 1rem;">From intimate portrait sessions to grand wedding celebrations, we bring creativity, technical expertise, and a passion for storytelling to every project. Our state-of-the-art equipment and professional-grade cameras are also available for rent to fellow photography enthusiasts.</p><!-- Image Carousel -->
+     <div style="position: relative; height: 300px; border-radius: 10px; overflow: hidden; margin: 2rem 0;">
+      <div id="carousel" style="display: flex; transition: transform 0.5s ease;">
+       <div style="min-width: 100%; height: 300px; background: linear-gradient(45deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+        📸 Professional Wedding Photography
+       </div>
+       <div style="min-width: 100%; height: 300px; background: linear-gradient(45deg, #f093fb, #f5576c); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+        👨‍👩‍👧‍👦 Family Portrait Sessions
+       </div>
+       <div style="min-width: 100%; height: 300px; background: linear-gradient(45deg, #4facfe, #00f2fe); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+        🎉 Corporate Event Coverage
+       </div>
+       <div style="min-width: 100%; height: 300px; background: linear-gradient(45deg, #43e97b, #38f9d7); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+        📷 Premium Camera Rentals
+       </div>
+      </div>
+     </div>
+     <div style="text-align: center;"><button class="book-btn" onclick="showSection('services')" style="width: auto; padding: 1rem 2rem;"> Explore Our Services </button>
+     </div>
+    </div>
+   </section><!-- Services Section -->
+   <section id="servicesSection" class="section hidden">
+    <div class="hero">
+     <h1>Our Photography Services</h1>
+     <p>Professional photography and camera rental services tailored to your needs</p>
+    </div>
+    <div class="services">
+     <div class="service-card">
+      <div class="service-icon">
+       📷
+      </div>
+      <h3>Camera Rental</h3>
+      <p>Professional DSLR and mirrorless cameras available for rent. Perfect for events, travel, or personal projects.</p>
+      <div class="price">
+       RM150/day
+      </div>
+      <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;"><strong>💰 Safety Deposit: RM50</strong><br><small>Fully refundable upon safe return without damage</small><br><small style="color: #e53e3e; font-weight: 600;">Maximum: 5 days rental</small>
+      </div><button class="book-btn" onclick="openBookingModal('Camera Rental', 150, 50)">Book Camera</button>
+     </div>
+     <div class="service-card">
+      <div class="service-icon">
+       👨‍💼
+      </div>
+      <h3>Portrait Session</h3>
+      <p>Professional portrait photography for individuals, couples, or families. Includes editing and digital delivery.</p>
+      <div class="price">
+       RM600/session
+      </div>
+      <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;"><strong>💰 Deposit: RM100</strong><br><small>Refundable security deposit</small>
+      </div><button class="book-btn" onclick="openBookingModal('Portrait Session', 600, 100)">Book Session</button>
+     </div>
+     <div class="service-card">
+      <div class="service-icon">
+       💒
+      </div>
+      <h3>Event Photography</h3>
+      <p>Complete event coverage including weddings, parties, and corporate events. Full day coverage with edited photos.</p>
+      <div class="price">
+       RM2400/event
+      </div>
+      <div style="background: #f7fafc; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; color: #4a5568;"><strong>💰 Deposit: RM200</strong><br><small>Refundable security deposit</small>
+      </div><button class="book-btn" onclick="openBookingModal('Event Photography', 2400, 200)">Book Event</button>
+     </div>
+    </div>
+   </section><!-- Portfolio Section -->
+   <section id="portfolioSection" class="section hidden">
+    <div class="hero">
+     <h1>Our Portfolio</h1>
+     <p>Showcasing our finest work and creative excellence</p>
+    </div>
+    <div style="background: white; border-radius: 15px; padding: 2rem; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+     <h3 style="color: #4a5568; margin-bottom: 1rem;">Portfolio Coming Soon</h3>
+     <p style="color: #718096;">We're currently updating our portfolio with our latest work. Check back soon!</p>
+    </div>
+   </section><!-- Contact Section -->
+   <section id="contactSection" class="section hidden">
+    <div class="hero">
+     <h1>Contact Us</h1>
+     <p>Get in touch for bookings and inquiries</p>
+    </div>
+    <div style="background: white; border-radius: 15px; padding: 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+      <div>
+       <h3 style="color: #4a5568; margin-bottom: 1rem;">📍 Location</h3>
+       <p style="color: #718096;">Kuala Lumpur, Malaysia</p>
+      </div>
+      <div>
+       <h3 style="color: #4a5568; margin-bottom: 1rem;">📞 Phone</h3>
+       <p style="color: #718096;">+60 12-345-6789</p>
+      </div>
+      <div>
+       <h3 style="color: #4a5568; margin-bottom: 1rem;">✉️ Email</h3>
+       <p style="color: #718096;">info@demanisphotography.com</p>
+      </div>
+     </div>
+    </div>
+   </section>
+  </main><!-- Booking Modal -->
+  <div id="bookingModal" class="modal">
+   <div class="modal-content"><span class="close" onclick="closeBookingModal()">×</span>
+    <h2 id="modalTitle">Book Service</h2>
+    <form id="bookingForm" onsubmit="submitBooking(event)">
+     <div class="form-group"><label for="customerName">Full Name</label> <input type="text" id="customerName" name="customerName" required>
+     </div>
+     <div class="form-group"><label for="customerEmail">Email Address</label> <input type="email" id="customerEmail" name="customerEmail" required>
+     </div>
+     <div class="form-group"><label for="customerPhone">Phone Number</label> <input type="tel" id="customerPhone" name="customerPhone" required>
+     </div>
+     <div class="form-group" id="brandGroup" style="display: none;"><label for="cameraBrand">Camera Brand</label> <select id="cameraBrand" name="cameraBrand" onchange="showCameraModels()"> <option value="">Select Brand</option> <option value="Canon">Canon</option> <option value="Nikon">Nikon</option> <option value="Sony">Sony</option> <option value="Fujifilm">Fujifilm</option> <option value="Panasonic">Panasonic</option> </select>
+     </div>
+     <div class="form-group" id="modelGroup" style="display: none;"><label for="cameraModel">Camera Model</label> <select id="cameraModel" name="cameraModel"> <option value="">Select Model</option> </select>
+     </div>
+     <div class="form-group"><label id="dateLabel">Select Date</label>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;"><button type="button" onclick="changeMonth(-1)" style="background: #667eea; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">← Previous</button>
+       <h3 id="monthYear" style="margin: 0; color: #4a5568;"></h3><button type="button" onclick="changeMonth(1)" style="background: #667eea; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">Next →</button>
+      </div>
+      <div class="calendar" id="calendar"></div>
+     </div>
+     <div class="form-group" id="timeSlotGroup" style="display: none;"><label>Select Time</label>
+      <div class="time-slots" id="timeSlots"></div>
+     </div>
+     <div class="form-group"><label for="specialRequests">Special Requests</label> <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any special requirements or notes..."></textarea>
+     </div>
+     <div class="form-group">
+      <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+       <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Service Fee:</span> <span>RM<span id="serviceFee">0</span></span>
+       </div>
+       <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Deposit (Refundable):</span> <span>RM<span id="depositAmount">0</span></span>
+       </div>
+       <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
+       <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem;"><span>Total Amount:</span> <span>RM<span id="totalPrice">0</span></span>
+       </div>
+      </div>
+     </div><button type="submit" class="submit-btn">Confirm Booking</button>
+    </form>
+   </div>
+  </div>
+  <script>
         let selectedService = '';
         let selectedPrice = 0;
         let selectedDeposit = 0;
-        let selectedDate = '';
+        let selectedDates = [];
         let selectedTime = '';
+        let currentSection = 'home';
+        let currentCalendarMonth = new Date().getMonth();
+        let currentCalendarYear = new Date().getFullYear();
 
         const cameraModels = {
             Canon: ['EOS R5', 'EOS R6 Mark II', 'EOS 5D Mark IV', 'EOS 90D', 'EOS M50 Mark II'],
@@ -459,24 +530,73 @@
             Panasonic: ['GH6', 'S5 II', 'G9', 'FZ2500', 'GX9']
         };
 
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + 'Section').classList.remove('hidden');
+            currentSection = sectionName;
+            
+            // Update navigation active states
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.getElementById(sectionName + 'Nav').classList.add('active');
+        }
+
+        function updatePricing() {
+            const days = selectedDates.length;
+            const totalServiceFee = selectedPrice * days;
+            document.getElementById('serviceFee').textContent = totalServiceFee;
+            document.getElementById('totalPrice').textContent = (totalServiceFee + selectedDeposit);
+        }
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const totalSlides = 4;
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            const carousel = document.getElementById('carousel');
+            if (carousel) {
+                carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+        }
+
+        // Auto-advance carousel every 3 seconds
+        setInterval(nextSlide, 3000);
+
         function openBookingModal(service, price, deposit) {
             selectedService = service;
             selectedPrice = price;
             selectedDeposit = deposit;
+            selectedDates = [];
+            
+            // Reset calendar to current month
+            const today = new Date();
+            currentCalendarMonth = today.getMonth();
+            currentCalendarYear = today.getFullYear();
+            
             document.getElementById('modalTitle').textContent = `Book ${service}`;
             document.getElementById('serviceFee').textContent = price;
             document.getElementById('depositAmount').textContent = deposit;
             document.getElementById('totalPrice').textContent = (price + deposit);
             
-            // Show camera brand selection only for camera rental
+            // Show camera-specific fields only for camera rental
             const brandGroup = document.getElementById('brandGroup');
             const modelGroup = document.getElementById('modelGroup');
+            const dateLabel = document.getElementById('dateLabel');
             
             if (service === 'Camera Rental') {
                 brandGroup.style.display = 'block';
+                dateLabel.textContent = 'Select Dates (Max 5 days)';
             } else {
                 brandGroup.style.display = 'none';
                 modelGroup.style.display = 'none';
+                dateLabel.textContent = 'Select Date';
             }
             
             document.getElementById('bookingModal').style.display = 'block';
@@ -490,7 +610,7 @@
 
         function resetForm() {
             document.getElementById('bookingForm').reset();
-            selectedDate = '';
+            selectedDates = [];
             selectedTime = '';
             document.getElementById('timeSlotGroup').style.display = 'none';
             document.getElementById('modelGroup').style.display = 'none';
@@ -523,11 +643,15 @@
 
         function generateCalendar() {
             const calendar = document.getElementById('calendar');
+            const monthYear = document.getElementById('monthYear');
             calendar.innerHTML = '';
             
             const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            // Update month/year display
+            monthYear.textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
             
             // Calendar headers
             const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -539,8 +663,8 @@
             });
             
             // Get first day of month and number of days
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+            const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
             
             // Add empty cells for days before month starts
             for (let i = 0; i < firstDay; i++) {
@@ -555,28 +679,133 @@
                 dayElement.className = 'calendar-day';
                 dayElement.textContent = day;
                 
-                const dayDate = new Date(currentYear, currentMonth, day);
-                if (dayDate < today) {
+                const dayDate = new Date(currentCalendarYear, currentCalendarMonth, day);
+                const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                
+                if (dayDate < todayDate) {
                     dayElement.classList.add('disabled');
                 } else {
-                    dayElement.onclick = () => selectDate(day, currentMonth, currentYear);
+                    dayElement.onclick = () => selectDate(day, currentCalendarMonth, currentCalendarYear);
                 }
                 
                 calendar.appendChild(dayElement);
             }
+            
+            // Update display for selected dates
+            updateCalendarDisplay();
+        }
+
+        function changeMonth(direction) {
+            const today = new Date();
+            const maxMonth = today.getMonth() + 3; // 3 months from now
+            const maxYear = today.getFullYear() + Math.floor(maxMonth / 12);
+            const adjustedMaxMonth = maxMonth % 12;
+            
+            currentCalendarMonth += direction;
+            
+            if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            } else if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            }
+            
+            // Prevent going before current month
+            if (currentCalendarYear < today.getFullYear() || 
+                (currentCalendarYear === today.getFullYear() && currentCalendarMonth < today.getMonth())) {
+                currentCalendarMonth = today.getMonth();
+                currentCalendarYear = today.getFullYear();
+            }
+            
+            // Prevent going beyond 3 months from now
+            if (currentCalendarYear > maxYear || 
+                (currentCalendarYear === maxYear && currentCalendarMonth > adjustedMaxMonth)) {
+                currentCalendarMonth = adjustedMaxMonth;
+                currentCalendarYear = maxYear;
+            }
+            
+            generateCalendar();
+        }
+
+        function updateCalendarDisplay() {
+            // Clear all selections
+            document.querySelectorAll('.calendar-day').forEach(el => {
+                el.classList.remove('selected', 'selected-range', 'selected-start', 'selected-end', 'selected-single');
+            });
+            
+            if (selectedDates.length === 0) return;
+            
+            // Mark selected dates
+            selectedDates.forEach((dateStr, index) => {
+                const [year, month, day] = dateStr.split('-').map(Number);
+                if (year === currentCalendarYear && month - 1 === currentCalendarMonth) {
+                    const dayElements = document.querySelectorAll('.calendar-day');
+                    dayElements.forEach(el => {
+                        if (el.textContent == day && !el.classList.contains('disabled')) {
+                            if (selectedService === 'Camera Rental' && selectedDates.length > 1) {
+                                if (index === 0) {
+                                    el.classList.add('selected-start');
+                                } else if (index === selectedDates.length - 1) {
+                                    el.classList.add('selected-end');
+                                } else {
+                                    el.classList.add('selected-range');
+                                }
+                            } else {
+                                el.classList.add('selected-single');
+                            }
+                        }
+                    });
+                }
+            });
         }
 
         function selectDate(day, month, year) {
-            // Remove previous selection
-            document.querySelectorAll('.calendar-day.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dateIndex = selectedDates.indexOf(dateStr);
             
-            // Add selection to clicked day
-            event.target.classList.add('selected');
+            if (selectedService === 'Camera Rental') {
+                // Multi-day selection for camera rental
+                if (dateIndex > -1) {
+                    // Date already selected, remove it
+                    selectedDates.splice(dateIndex, 1);
+                } else {
+                    // Add new date if under limit
+                    if (selectedDates.length < 5) {
+                        selectedDates.push(dateStr);
+                        selectedDates.sort(); // Keep dates in chronological order
+                    } else {
+                        // Create inline message for limit
+                        const existingMsg = document.getElementById('limitMessage');
+                        if (existingMsg) existingMsg.remove();
+                        
+                        const limitMsg = document.createElement('div');
+                        limitMsg.id = 'limitMessage';
+                        limitMsg.style.cssText = 'background: #fed7d7; color: #c53030; padding: 0.5rem; border-radius: 5px; margin-top: 0.5rem; text-align: center; font-size: 0.9rem;';
+                        limitMsg.textContent = 'Maximum 5 days can be selected for camera rental';
+                        document.getElementById('dateLabel').parentNode.appendChild(limitMsg);
+                        
+                        setTimeout(() => {
+                            if (document.getElementById('limitMessage')) {
+                                document.getElementById('limitMessage').remove();
+                            }
+                        }, 3000);
+                        return;
+                    }
+                }
+            } else {
+                // Single date selection for other services
+                selectedDates = [dateStr];
+            }
             
-            selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            generateTimeSlots();
+            updateCalendarDisplay();
+            updatePricing();
+            
+            if (selectedDates.length > 0) {
+                generateTimeSlots();
+            } else {
+                document.getElementById('timeSlotGroup').style.display = 'none';
+            }
         }
 
         function generateTimeSlots() {
@@ -611,17 +840,37 @@
         function submitBooking(event) {
             event.preventDefault();
             
-            if (!selectedDate || !selectedTime) {
-                alert('Please select both date and time for your booking.');
+            if (selectedDates.length === 0 || !selectedTime) {
+                // Create inline message instead of alert
+                const existingMsg = document.getElementById('validationMessage');
+                if (existingMsg) existingMsg.remove();
+                
+                const validationMsg = document.createElement('div');
+                validationMsg.id = 'validationMessage';
+                validationMsg.style.cssText = 'background: #fed7d7; color: #c53030; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;';
+                validationMsg.textContent = 'Please select both date(s) and time for your booking.';
+                
+                const submitBtn = document.querySelector('.submit-btn');
+                submitBtn.parentNode.insertBefore(validationMsg, submitBtn);
+                
+                setTimeout(() => {
+                    if (document.getElementById('validationMessage')) {
+                        document.getElementById('validationMessage').remove();
+                    }
+                }, 4000);
                 return;
             }
             
             const formData = new FormData(event.target);
+            const days = selectedDates.length;
+            const totalServiceFee = selectedPrice * days;
             const bookingData = {
                 service: selectedService,
                 price: selectedPrice,
+                days: days,
+                totalServiceFee: totalServiceFee,
                 deposit: selectedDeposit,
-                date: selectedDate,
+                dates: selectedDates,
                 time: selectedTime,
                 name: formData.get('customerName'),
                 email: formData.get('customerEmail'),
@@ -645,15 +894,22 @@
                 max-width: 400px;
             `;
             
+            let datesText = '';
+            if (bookingData.service === 'Camera Rental' && bookingData.days > 1) {
+                datesText = `<p><strong>Dates:</strong> ${bookingData.dates.join(', ')}</p>`;
+            } else {
+                datesText = `<p><strong>Date:</strong> ${bookingData.dates[0]}</p>`;
+            }
+            
             confirmationDiv.innerHTML = `
                 <h3 style="color: #48bb78; margin-bottom: 1rem;">✅ Booking Confirmed!</h3>
                 <p><strong>Service:</strong> ${bookingData.service}</p>
-                <p><strong>Date:</strong> ${bookingData.date}</p>
+                ${datesText}
                 <p><strong>Time:</strong> ${bookingData.time}</p>
                 <div style="background: #f7fafc; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: left;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Service Fee:</span>
-                        <span>RM${bookingData.price}</span>
+                        <span>Service Fee (${bookingData.days} day${bookingData.days > 1 ? 's' : ''}):</span>
+                        <span>RM${bookingData.totalServiceFee}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span>Deposit:</span>
@@ -662,7 +918,7 @@
                     <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
                     <div style="display: flex; justify-content: space-between; font-weight: bold;">
                         <span>Total:</span>
-                        <span>RM${bookingData.price + bookingData.deposit}</span>
+                        <span>RM${bookingData.totalServiceFee + bookingData.deposit}</span>
                     </div>
                 </div>
                 <p style="margin-top: 1rem; color: #718096; font-size: 0.9rem;">We'll send a confirmation email to ${bookingData.email}</p>
@@ -683,5 +939,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'995206d3f3c6a846',t:'MTc2MTU2NjM2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99580b3cd173a84a',t:'MTc2MTYyOTQ1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
